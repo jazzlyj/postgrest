@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\jayla\kompose.exe convert
+    kompose.version: 1.26.0 (40646f47)
+  labels:
+    io.kompose.service: server
+  name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: server
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\jayla\kompose.exe convert
+        kompose.version: 1.26.0 (40646f47)
+      labels:
+        io.kompose.service: server
+    spec:
+      containers:
+        - env:
+            - name: PGRST_DB_ANON_ROLE
+              value: app_user
+            - name: PGRST_DB_SCHEMA
+              value: public
+            - name: PGRST_DB_URI
+              value: postgres://app_user:secret@db:5432/postgres
+            - name: PGRST_SERVER_PROXY_URI
+              value: http://127.0.0.1:3000
+          image: postgrest/postgrest
+          name: server
+          ports:
+            - containerPort: 3000
+          resources: {}
+      restartPolicy: Always
+status: {}
