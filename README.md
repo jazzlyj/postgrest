@@ -10,6 +10,8 @@ minikube start
 
 
 # Setup
+## K8s deployments and services
+```
 kubectl apply -f db-service.yaml
 kubectl apply -f pgadmin-data-persistentvolumeclaim.yaml
 kubectl apply -f pgadmin-deployment.yaml
@@ -18,11 +20,50 @@ kubectl apply -f server-deployment.yaml
 kubectl apply -f server-service.yaml
 kubectl apply -f swagger-deployment.yaml
 kubectl apply -f swagger-service.yaml
+```
 
-* setup port forwarding 
+## port forwarding 
+```
 kubectl port-forward service/pgadmin 5050:5050
-kubectl port-forward service/server 3000:3000
 kubectl port-forward service/swagger 8080:8080
+kubectl port-forward service/server 3000:3000
+```
+
+## pgadmin setup
+ * setup a server with connection props:
+```
+hostname = db # from pgadmin deployment
+username = app_user # from db deployment
+password = secret # from db deployment
+
+```
+
+## create a table and insert data
+```sql
+create table public.todos (
+  id serial primary key,
+  done boolean not null default false,
+  task text not null,
+  due timestamptz
+);
+
+insert into public.todos (task) values
+  ('finish tutorial 0'), ('pat self on back');
+
+```
+
+## test api server
+```bash
+curl http://localhost:3000/todos
+
+[{"id":1,"done":false,"task":"finish tutorial 0","due":null}, 
+ {"id":2,"done":false,"task":"pat self on back","due":null}]
+
+
+```
+
+
+
 
 
 
