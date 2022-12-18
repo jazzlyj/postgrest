@@ -43,4 +43,3 @@ spec:
         - name: pgadmin-data
           persistentVolumeClaim:
             claimName: pgadmin-data
-status: {}

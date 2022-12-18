@@ -45,4 +45,3 @@ spec:
         - name: db-data
           persistentVolumeClaim:
             claimName: db-data
-status: {}
